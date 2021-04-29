@@ -1,0 +1,721 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>使用 PHP 7 实现 GoF 设计模式之行为型 - ZA TAN</title><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="行为型解决的是不同对象之间的通信挑战。它们描述了不同的对象和类之间如何相互发送消息以使事情发生。"><meta name=generator content="Hugo 0.68.3 with theme pure"><title>使用 PHP 7 实现 GoF 设计模式之行为型 - ZA TAN</title><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/css/style.min.7dc20efbc53647d41aa9ddea0c48e59300223d084e66ea0cbe7c30bd88903acc.css><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="使用 PHP 7 实现 GoF 设计模式之行为型"><meta property="og:description" content="行为型解决的是不同对象之间的通信挑战。它们描述了不同的对象和类之间如何相互发送消息以使事情发生。"><meta property="og:type" content="article"><meta property="og:url" content="https://www.ganymedenil.com/2021/01/09/php7-gof-behavioral-patterns.html"><meta property="article:published_time" content="2021-01-09T23:20:53+00:00"><meta property="article:modified_time" content="2021-01-09T23:20:53+00:00"><meta itemprop=name content="使用 PHP 7 实现 GoF 设计模式之行为型"><meta itemprop=description content="行为型解决的是不同对象之间的通信挑战。它们描述了不同的对象和类之间如何相互发送消息以使事情发生。"><meta itemprop=datePublished content="2021-01-09T23:20:53+00:00"><meta itemprop=dateModified content="2021-01-09T23:20:53+00:00"><meta itemprop=wordCount content="4503"><meta itemprop=keywords content="php,"><meta name=twitter:card content="summary"><meta name=twitter:title content="使用 PHP 7 实现 GoF 设计模式之行为型"><meta name=twitter:description content="行为型解决的是不同对象之间的通信挑战。它们描述了不同的对象和类之间如何相互发送消息以使事情发生。"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head></head><body class="main-center theme-white" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/GanymedeNil target=_blank><img class="img-circle img-rotate" src=/avatar.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">Ganymede Nil</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">Developer</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>BeiJing, China</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i><span class=menu-title>首页</span></a></li><li class="menu-item menu-item-archives"><a href=/posts><i class="icon icon-archives-fill"></i><span class=menu-title>归档</span></a></li><li class="menu-item menu-item-categories"><a href=/categories><i class="icon icon-folder"></i><span class=menu-title>分类</span></a></li><li class="menu-item menu-item-tags"><a href=/tags><i class="icon icon-tags"></i><span class=menu-title>标签</span></a></li><li class="menu-item menu-item-links"><a href=/links><i class="icon icon-friendship"></i><span class=menu-title>友链</span></a></li><li class="menu-item menu-item-about"><a href=/about><i class="icon icon-cup-fill"></i><span class=menu-title>关于</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>公告</h3><div class=widget-body><div id=board><div class=content><p>欢迎交流与分享经验!~</p></div></div></div></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list><li class=category-list-item><a href=/categories/Laravel/ class=category-list-link>Laravel</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/PHP/ class=category-list-link>PHP</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/go%E5%9F%BA%E7%A1%80%E5%BA%93/ class=category-list-link>go基础库</a><span class=category-list-count>51</span></li><li class=category-list-item><a href=/categories/php7/ class=category-list-link>php7</a><span class=category-list-count>5</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84NGINX/ class=category-list-link>写给大忙人看的NGINX</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B3%BB%E7%B1%BB/ class=category-list-link>写给大忙人看的技术书系类</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%BC%80%E5%8F%91/ class=category-list-link>开发</a><span class=category-list-count>11</span></li><li class=category-list-item><a href=/categories/%E6%9E%B6%E6%9E%84/ class=category-list-link>架构</a><span class=category-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=/tags/Php-Storm/ class=tag-list-link>Php-Storm</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/Predis/ class=tag-list-link>Predis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/ddd/ class=tag-list-link>ddd</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/docker/ class=tag-list-link>docker</a><span class=tag-list-count>3</span></li><li class=tag-list-item><a href=/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>54</span></li><li class=tag-list-item><a href=/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/laravel/ class=tag-list-link>laravel</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/nginx/ class=tag-list-link>nginx</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/php/ class=tag-list-link>php</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=/tags/redis/ class=tag-list-link>redis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/rust/ class=tag-list-link>rust</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/swoole/ class=tag-list-link>swoole</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/xdebug/ class=tag-list-link>xdebug</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=/2021/04/28/php71-to-php74.html class=title>PHP 7.1 升级至 7.4</a></p><p class=item-date><time datetime="2021-04-28 22:18:34 +0000 UTC" itemprop=datePublished>2021-04-28</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-behavioral-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之行为型</a></p><p class=item-date><time datetime="2021-01-09 23:20:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-structural-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之结构型</a></p><p class=item-date><time datetime="2021-01-09 23:10:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-creational-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之创建型</a></p><p class=item-date><time datetime="2021-01-09 23:04:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2020/10/04/php-7-real-world-application-development.html class=title>PHP 7:真实世界的应用开发（中文翻译）</a></p><p class=item-date><time datetime="2020-10-04 15:53:09 +0000 UTC" itemprop=datePublished>2020-10-04</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2021/01/09/php7-gof-behavioral-patterns.html>使用 PHP 7 实现 GoF 设计模式之行为型</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=/2021/01/09/php7-gof-behavioral-patterns.html class=article-date><time datetime="2021-01-09 23:20:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></a></span>
+<span class=article-category><i class="icon icon-folder"></i>&nbsp;
+<a class=article-category-link href=/categories/php7/>php7</a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/php/>php</a></span>
+<span class=post-comment><i class="icon icon-comment"></i>&nbsp;<a href=/2021/01/09/php7-gof-behavioral-patterns.html#comments class=article-comment-link>评论</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 4503字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 9分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><p>行为型解决的是不同对象之间的通信挑战。它们描述了不同的对象和类之间如何相互发送消息以使事情发生。</p><p>以下是我们归类为行为型的模式列表。</p><ul><li>责任链模式</li><li>命令模式</li><li>解析器模式</li><li>迭代器模式</li><li>中介者模式</li><li>备忘录模式</li><li>观察者模式</li><li>状态模式</li><li>策略模式</li><li>模板方法模式</li><li>访问者模式</li></ul><h1 id=责任链模式>责任链模式</h1><p>责任链模式通过使一个以上的对象以链式方式处理请求，将请求的发送方与接收方解耦。各种类型的处理对象可以动态地添加到链中。使用递归组成链，可以实现无限数量的处理对象。</p><p>下面是一个责任链模式的实现例子。</p><pre><code class=language-php>abstract class SocialNotifier {
+    private $notifyNext = null;
+
+
+    public function notifyNext(SocialNotifier $notifier) {
+        $this-&gt;notifyNext = $notifier;
+        return $this-&gt;notifyNext;
+    }
+
+
+    final public function push($message) {
+        $this-&gt;publish($message);
+
+
+        if ($this-&gt;notifyNext !== null) {
+            $this-&gt;notifyNext-&gt;push($message);
+        }
+    }
+
+
+    abstract protected function publish($message);
+}
+
+
+class TwitterSocialNotifier extends SocialNotifier {
+    public function publish($message) {
+        // Implementation...
+    }
+}
+
+
+class FacebookSocialNotifier extends SocialNotifier {
+    protected function publish($message) {
+        // Implementation...
+    }
+}
+
+
+class PinterestSocialNotifier extends SocialNotifier {
+    protected function publish($message) {
+        // Implementation...
+    }
+}
+
+
+// Client
+$notifier = new TwitterSocialNotifier();
+
+
+$notifier-&gt;notifyNext(new FacebookSocialNotifier())
+    -&gt;notifyNext(new PinterestSocialNotifier());
+
+
+$notifier-&gt;push('Awesome new product available!');
+</code></pre><p>我们首先创建了一个抽象的<code>SocialNotifier</code>类，并实现了抽象方法<code>publish</code>、<code>notifyNext</code>和<code>push</code>方法。然后我们定义了<code>TwitterSocialNotifier</code>、<code>FacebookSocialNotifier</code>和<code>PinterestSocialNotifier</code>，它们都是对抽象<code>SocialNotifier</code>的扩展。客户端首先实例化<code>TwitterSocialNotifier</code>，然后是两次<code>notifyNext</code>调用，在调用最后的<code>push</code>方法之前，向它传递另外两个<code>notifier</code>类型的实例。</p><h1 id=命令模式>命令模式</h1><p>命令模式将执行某些操作的对象与知道如何使用它的对象解耦。它通过封装以后执行某个操作所需的所有相关信息来实现。这意味着对象、方法名和方法参数的信息。</p><p>下面是一个命令模式的实现例子。</p><pre><code class=language-php>interface LightBulbCommand {
+    public function execute();
+}
+
+
+class LightBulbControl {
+    public function turnOn() {
+        echo 'LightBulb turnOn';
+    }
+
+
+    public function turnOff() {
+        echo 'LightBulb turnOff';
+    }
+}
+
+
+class TurnOnLightBulb implements LightBulbCommand {
+    private $lightBulbControl;
+
+
+    public function __construct(LightBulbControl $lightBulbControl) {
+        $this-&gt;lightBulbControl = $lightBulbControl;
+    }
+
+
+    public function execute() {
+        $this-&gt;lightBulbControl-&gt;turnOn();
+    }
+}
+
+
+class TurnOffLightBulb implements LightBulbCommand {
+    private $lightBulbControl;
+
+
+    public function __construct(LightBulbControl $lightBulbControl) {
+        $this-&gt;lightBulbControl = $lightBulbControl;
+    }
+
+
+    public function execute() {
+        $this-&gt;lightBulbControl-&gt;turnOff();
+    }
+}
+
+
+// Client
+$command = new TurnOffLightBulb(new LightBulbControl());
+$command-&gt;execute();
+</code></pre><p>我们首先创建一个<code>LightBulbCommand</code>接口。然后我们定义了<code>LightBulbControl</code>类，它提供了两个简单的<code>turnOn</code>/<code>turnOff</code>方法。然后，我们定义了<code>TurnOnLightBulb</code>和<code>TurnOffLightBulb</code>类，它们实现了<code>LightBulbCommand</code>接口。最后，客户端是用<code>LightBulbControl</code>的实例实例化<code>TurnOffLightBulb</code>对象，并对其调用执行方法。</p><h1 id=解析器模式>解析器模式</h1><p>解释器模式规定了如何评价语言语法或表达式。我们在定义解释器的同时，也定义了语言语法的表示方法。语言语法的表示使用复合类层次结构，其中规则被映射到类。然后，解释器使用表示法来解释语言中的表达式。</p><p>下面是一个解释器模式实现的例子。</p><pre><code class=language-php>interface MathExpression
+{
+    public function interpret(array $values);
+}
+
+
+class Variable implements MathExpression {
+    private $char;
+
+
+    public function __construct($char) {
+        $this-&gt;char = $char;
+    }
+
+
+    public function interpret(array $values) {
+        return $values[$this-&gt;char];
+    }
+}
+
+
+class Literal implements MathExpression {
+    private $value;
+
+
+    public function __construct($value) {
+        $this-&gt;value = $value;
+    }
+
+
+    public function interpret(array $values) {
+        return $this-&gt;value;
+    }
+}
+
+
+class Sum implements MathExpression {
+    private $x;
+    private $y;
+
+
+    public function __construct(MathExpression $x, MathExpression $y) {
+        $this-&gt;x = $x;
+        $this-&gt;y = $y;
+    }
+
+
+    public function interpret(array $values) {
+        return $this-&gt;x-&gt;interpret($values) + $this-&gt;y-&gt;interpret($values);
+    }
+}
+
+
+class Product implements MathExpression {
+    private $x;
+    private $y;
+
+
+    public function __construct(MathExpression $x, MathExpression $y) {
+        $this-&gt;x = $x;
+        $this-&gt;y = $y;
+    }
+
+
+    public function interpret(array $values) {
+        return $this-&gt;x-&gt;interpret($values) * $this-&gt;y-&gt;interpret($values);
+    }
+}
+
+
+// Client
+$expression = new Product(
+    new Literal(5),
+    new Sum(
+        new Variable('c'),
+        new Literal(2)
+    )
+);
+
+
+echo $expression-&gt;interpret(array('c' =&gt; 3)); // 25
+</code></pre><p>我们首先创建一个<code>MathExpression</code>接口，有一个 <code>interpret</code> 方法。然后我们添加<code>Variable</code>、<code>Literal</code>、<code>Sum</code>和<code>Product</code>类，所有这些类都实现了<code>MathExpression</code>接口。然后，客户端从<code>Product</code>类中实例化，将<code>Literal</code>和<code>Sum</code>的实例传递给它，并以一个 <code>interpret</code> 方法调用结束。</p><h1 id=迭代器模式>迭代器模式</h1><p>迭代器模式用于遍历一个容器并访问其元素。换句话说，一个类可以遍历另一个类的元素。PHP对迭代器有一个本地支持，作为内置的<code>\Iterator</code>和<code>\IteratorAggregate</code>接口的一部分。</p><p>下面是一个迭代器模式实现的例子。</p><pre><code class=language-php>class ProductIterator implements \Iterator {
+    private $position = 0;
+    private $productsCollection;
+
+
+    public function __construct(ProductCollection $productsCollection) {
+        $this-&gt;productsCollection = $productsCollection;
+    }
+
+
+    public function current() {
+        return $this-&gt;productsCollection-&gt;getProduct($this-&gt;position);
+    }
+
+
+    public function key() {
+        return $this-&gt;position;
+    }
+
+
+    public function next() {
+        $this-&gt;position++;
+    }
+
+
+    public function rewind() {
+        $this-&gt;position = 0;
+    }
+
+
+    public function valid() {
+        return !is_null($this-&gt;productsCollection-&gt;getProduct($this-&gt;position));
+    }
+}
+
+
+class ProductCollection implements \IteratorAggregate {
+    private $products = array();
+
+
+    public function getIterator() {
+        return new ProductIterator($this);
+    }
+
+
+    public function addProduct($string) {
+        $this-&gt;products[] = $string;
+    }
+
+
+    public function getProduct($key) {
+        if (isset($this-&gt;products[$key])) {
+            return $this-&gt;products[$key];
+        }
+        return null;
+    }
+
+
+    public function isEmpty() {
+        return empty($products);
+    }
+}
+
+
+$products = new ProductCollection();
+$products-&gt;addProduct('T-Shirt Red');
+$products-&gt;addProduct('T-Shirt Blue');
+$products-&gt;addProduct('T-Shirt Green');
+$products-&gt;addProduct('T-Shirt Yellow');
+
+
+foreach ($products as $product) {
+    var_dump($product);
+}
+</code></pre><p>首先创建了一个<code>ProductIterator</code>，它实现了标准的PHP <code>\Iterator</code>接口，然后我们添加了<code>ProductCollection</code>，它实现了标准的PHP <code>\IteratorAggregate</code>接口。客户端创建了一个<code>ProductCollection</code>的实例，通过<code>addProduct</code>方法调用将值堆积到其中，并循环浏览整个集合。</p><h1 id=中介者模式>中介者模式</h1><p>我们的软件中的类越多，它们的通信就越复杂。中介者模式通过将其封装成一个中介者对象来解决这种复杂性。对象不再直接通信，而是通过中介对象进行通信，因此降低了整体的耦合度。</p><p>下面是一个中介者模式实现的例子。</p><pre><code class=language-php>interface MediatorInterface {
+    public function fight();
+    public function talk();
+    public function registerA(ColleagueA $a);
+    public function registerB(ColleagueB $b);
+}
+
+
+class ConcreteMediator implements MediatorInterface {
+    protected $talk; // ColleagueA
+    protected $fight; // ColleagueB
+
+
+    public function registerA(ColleagueA $a) {
+        $this-&gt;talk = $a;
+    }
+
+
+    public function registerB(ColleagueB $b) {
+        $this-&gt;fight = $b;
+    }
+
+
+    public function fight() {
+        echo 'fighting...';
+    }
+
+
+    public function talk() {
+        echo 'talking...';
+    }
+}
+
+
+abstract class Colleague {
+    protected $mediator; // MediatorInterface
+    public abstract function doSomething();
+}
+
+
+class ColleagueA extends Colleague {
+
+
+    public function __construct(MediatorInterface $mediator) {
+        $this-&gt;mediator = $mediator;
+        $this-&gt;mediator-&gt;registerA($this);
+    }
+
+
+public function doSomething() {
+        $this-&gt;mediator-&gt;talk();
+}
+}
+
+
+class ColleagueB extends Colleague {
+
+
+    public function __construct(MediatorInterface $mediator) {
+        $this-&gt;mediator = $mediator;
+        $this-&gt;mediator-&gt;registerB($this);
+    }
+
+
+    public function doSomething() {
+        $this-&gt;mediator-&gt;fight();
+    }
+}
+
+
+// Client
+$mediator = new ConcreteMediator();
+$talkColleague = new ColleagueA($mediator);
+$fightColleague = new ColleagueB($mediator);
+
+
+$talkColleague-&gt;doSomething();
+$fightColleague-&gt;doSomething();
+</code></pre><p>我们首先创建了一个带有多个方法的<code>MediatorInterface</code>，由<code>ConcreteMediator</code>类实现。然后，我们定义了抽象类<code>Colleague</code>，强制在下面的<code>ColleagueA</code>和<code>ColleagueB</code>类上实现<code>doSomething</code>方法。客户端首先实例化<code>ConcreteMediator</code>，并将其实例传递给<code>ColleagueA</code>和<code>ColleagueB</code>的实例，并根据这些实例调用<code>doSomething</code>方法。</p><h1 id=备忘录模式>备忘录模式</h1><p>备忘录模式提供了对象还原功能。通过三个不同的对象来实现：originator、caretaker和memento，其中originator是保存以后还原所需的内部状态的对象。</p><p>以下是备忘录模式实现的一个例子。</p><pre><code class=language-php>class Memento {
+    private $state;
+
+
+    public function __construct($state) {
+        $this-&gt;state = $state;
+    }
+
+
+    public function getState() {
+        return $this-&gt;state;
+    }
+}
+
+
+class Originator {
+    private $state;
+
+
+    public function setState($state) {
+        return $this-&gt;state = $state;
+    }
+
+
+    public function getState() {
+        return $this-&gt;state;
+    }
+
+
+    public function saveToMemento() {
+        return new Memento($this-&gt;state);
+    }
+
+
+    public function restoreFromMemento(Memento $memento) {
+        $this-&gt;state = $memento-&gt;getState();
+    }
+}
+
+
+// Client - Caretaker
+$savedStates = array();
+
+
+$originator = new Originator();
+$originator-&gt;setState('new');
+$originator-&gt;setState('pending');
+$savedStates[] = $originator-&gt;saveToMemento();
+$originator-&gt;setState('processing');
+$savedStates[] = $originator-&gt;saveToMemento();
+$originator-&gt;setState('complete');
+$originator-&gt;restoreFromMemento($savedStates[1]);
+echo $originator-&gt;getState(); // processing
+</code></pre><p>我们首先创建一个<code>Memento</code>类，它将通过<code>getState</code>方法提供对象的当前状态。然后我们定义了<code>Originator</code>类，将状态推送给<code>Memento</code>。最后，客户端通过实例化<code>Originator</code>来扮演 <code>caretaker</code> 的角色，在它的几个状态之间进行杂耍，从<code>Memento</code>中保存和恢复这些状态。</p><h1 id=观察者模式>观察者模式</h1><p>观察者模式实现了对象之间一对多的依赖关系。持有依赖列表的对象被称为subject，而依赖者被称为observer。当subject对象改变状态时，所有的依赖对象都会得到通知并自动更新。</p><p>下面是一个观察者模式的实现例子。</p><pre><code class=language-php>class Customer implements \SplSubject {
+    protected $data = array();
+    protected $observers = array();
+
+
+    public function attach(\SplObserver $observer) {
+        $this-&gt;observers[] = $observer;
+    }
+
+
+    public function detach(\SplObserver $observer) {
+        $index = array_search($observer, $this-&gt;observers);
+
+
+        if ($index !== false) {
+            unset($this-&gt;observers[$index]);
+        }
+    }
+
+
+    public function notify() {
+        foreach ($this-&gt;observers as $observer) {
+            $observer-&gt;update($this);
+            echo 'observer updated';
+        }
+    }
+
+
+    public function __set($name, $value) {
+        $this-&gt;data[$name] = $value;
+
+
+        // notify the observers, that user has been updated
+        $this-&gt;notify();
+    }
+}
+
+
+class CustomerObserver implements \SplObserver {
+    public function update(\SplSubject $subject) {
+        /* Implementation... */
+    }
+}
+
+
+// Client
+$user = new Customer();
+$customerObserver = new CustomerObserver();
+$user-&gt;attach($customerObserver);
+
+
+$user-&gt;name = 'John Doe';
+$user-&gt;email = 'john.doe@fake.mail';
+</code></pre><p>我们首先创建一个<code>Customer</code>类，它实现了标准的PHP <code>\SplSubject</code>接口。然后我们定义了<code>CustomerObserver</code>类，它实现了标准的PHP <code>\SplObserver</code>接口。最后，客户端实例化<code>Customer</code>和<code>CustomerObserver</code>对象，并将<code>CustomerObserver</code>对象附加到<code>Customer</code>上。任何对姓名和电子邮件属性的改变都会被观察者捕获。</p><h1 id=状态模式>状态模式</h1><p>状态模式封装了同一对象根据其内部状态而产生的不同行为，使对象看起来像是改变了它的类。</p><p>下面是一个状态模式的实现例子。</p><pre><code class=language-php>interface Statelike {
+    public function writeName(StateContext $context, $name);
+}
+
+
+class StateLowerCase implements Statelike {
+    public function writeName(StateContext $context, $name) {
+        echo strtolower($name);
+        $context-&gt;setState(new StateMultipleUpperCase());
+    }
+}
+
+
+class StateMultipleUpperCase implements Statelike {
+    private $count = 0;
+
+
+    public function writeName(StateContext $context, $name) {
+        $this-&gt;count++;
+        echo strtoupper($name);
+        /* Change state after two invocations */
+        if ($this-&gt;count &gt; 1) {
+            $context-&gt;setState(new StateLowerCase());
+        }
+    }
+}
+
+
+class StateContext {
+    private $state;
+
+
+    public function setState(Statelike $state) {
+        $this-&gt;state = $state;
+    }
+
+
+    public function writeName($name) {
+        $this-&gt;state-&gt;writeName($this, $name);
+    }
+}
+
+
+// Client
+$stateContext = new StateContext();
+$stateContext-&gt;setState(new StateLowerCase());
+$stateContext-&gt;writeName('Monday');
+$stateContext-&gt;writeName('Tuesday');
+$stateContext-&gt;writeName('Wednesday');
+$stateContext-&gt;writeName('Thursday');
+$stateContext-&gt;writeName('Friday');
+$stateContext-&gt;writeName('Saturday');
+$stateContext-&gt;writeName('Sunday');
+</code></pre><p>我们首先创建了一个<code>Statelike</code>接口，然后是实现该接口的<code>StateLowerCase</code>和<code>StateMultipleUpperCase</code>。<code>StateMultipleUpperCase</code>在它的<code>writeName</code>中加入了一点计数逻辑，所以它在两次调用之后就会启动新的状态。然后我们定义了<code>StateContext</code>类，我们将用它来切换上下文。最后，客户端实例化<code>StateContext</code>，并通过<code>setState</code>方法将<code>StateLowerCase</code>的一个实例传递给它，然后是几个<code>writeName</code>方法。</p><h1 id=策略模式>策略模式</h1><p>策略模式定义了一个算法家族，每个算法都被封装起来，并可与该家族中的其他成员互换。</p><p>下面是一个策略模式的实现例子。</p><pre><code class=language-php>interface PaymentStrategy {
+    public function pay($amount);
+}
+
+
+class StripePayment implements PaymentStrategy {
+    public function pay($amount) {
+        echo 'StripePayment...';
+    }
+
+
+}
+
+
+class PayPalPayment implements PaymentStrategy {
+    public function pay($amount) {
+        echo 'PayPalPayment...';
+    }
+}
+
+
+class Checkout {
+    private $amount = 0;
+
+
+    public function __construct($amount = 0) {
+        $this-&gt;amount = $amount;
+    }
+
+
+    public function capturePayment() {
+        if ($this-&gt;amount &gt; 99.99) {
+            $payment = new PayPalPayment();
+        } else {
+            $payment = new StripePayment();
+        }
+
+
+        $payment-&gt;pay($this-&gt;amount);
+    }
+}
+
+
+$checkout = new Checkout(49.99);
+$checkout-&gt;capturePayment(); // StripePayment...
+
+
+$checkout = new Checkout(199.99);
+$checkout-&gt;capturePayment(); // PayPalPayment...
+</code></pre><p>我们首先创建了一个<code>PaymentStrategy</code>接口，然后是实现它的具体类<code>StripePayment</code>和<code>PayPalPayment</code>。然后我们定义了<code>Checkout</code>类，并在<code>capturePayment</code>方法中加入了一些决策逻辑。最后，客户端实例化<code>Checkout</code>，通过其构造函数传递一定的金额。根据金额，<code>Checkout</code>内部在调用<code>capturePayment</code>时，会触发一个或另一个付款。</p><h1 id=模板方法模式>模板方法模式</h1><p>模板方法模式在方法中定义了算法的程序骨架。它让我们通过使用类重载，重新定义算法的某些步骤，而不真正改变算法的结构。</p><p>下面是一个模板方法模式实现的例子。</p><pre><code class=language-php>abstract class Game {
+    private $playersCount;
+
+
+    abstract function initializeGame();
+    abstract function makePlay($player);
+    abstract function endOfGame();
+    abstract function printWinner();
+
+
+    public function playOneGame($playersCount)
+    {
+        $this-&gt;playersCount = $playersCount;
+        $this-&gt;initializeGame();
+        $j = 0;
+        while (!$this-&gt;endOfGame()) {
+            $this-&gt;makePlay($j);
+            $j = ($j + 1) % $playersCount;
+        }
+        $this-&gt;printWinner();
+    }
+}
+
+
+class Monopoly extends Game {
+    public function initializeGame() {
+        // Implementation...
+    }
+
+
+    public function makePlay($player) {
+        // Implementation...
+    }
+
+
+    public function endOfGame() {
+        // Implementation...
+    }
+
+
+    public function printWinner() {
+        // Implementation...
+    }
+}
+
+
+class Chess extends Game {
+    public function  initializeGame() {
+        // Implementation...
+    }
+
+
+    public function  makePlay($player) {
+        // Implementation...
+    }
+
+
+
+
+    public function  endOfGame() {
+        // Implementation...
+    }
+
+
+    public function  printWinner() {
+        // Implementation...
+    }
+}
+
+
+$game = new Chess();
+$game-&gt;playOneGame(2);
+
+
+$game = new Monopoly();
+$game-&gt;playOneGame(4);
+</code></pre><p>我们首先创建了一个抽象的<code>Game</code>类，该类提供了所有封装游戏玩法的实际抽象方法。然后我们定义了<code>Monopoly</code>和<code>Chess</code>类，这两个类都是由<code>Game</code>类扩展而来，为每个类实现了特定的游戏方法<code>game-play</code>。客户端只需实例化<code>Monopoly</code>和<code>Chess</code>对象，对每个对象调用<code>playOneGame</code>方法。</p><h1 id=访问者模式>访问者模式</h1><p>访问者模式是一种将算法与其操作的对象结构分离的方法。因此，我们能够在现有的对象结构上添加新的操作，而不实际修改这些结构。</p><p>下面是一个访问者模式的实现例子。</p><pre><code class=language-php>interface RoleVisitorInterface {
+    public function visitUser(User $role);
+    public function visitGroup(Group $role);
+}
+
+
+class RolePrintVisitor implements RoleVisitorInterface {
+    public function visitGroup(Group $role) {
+        echo 'Role: ' . $role-&gt;getName();
+    }
+
+
+    public function visitUser(User $role) {
+        echo 'Role: ' . $role-&gt;getName();
+    }
+}
+
+
+abstract class Role {
+    public function accept(RoleVisitorInterface $visitor) {
+        $klass = get_called_class();
+        preg_match('#([^\\\\]+)$#', $klass, $extract);
+        $visitingMethod = 'visit' . $extract[1];
+
+
+        if (!method_exists(__NAMESPACE__ . '\RoleVisitorInterface', $visitingMethod)) {
+            throw new \InvalidArgumentException(&quot;The visitor you provide cannot visit a $klass instance&quot;);
+        }
+
+
+        call_user_func(array($visitor, $visitingMethod), $this);
+    }
+}
+
+
+class User extends Role {
+    protected $name;
+
+
+    public function __construct($name) {
+        $this-&gt;name = (string)$name;
+    }
+
+
+    public function getName() {
+        return 'User ' . $this-&gt;name;
+    }
+}
+
+
+class Group extends Role {
+    protected $name;
+
+
+    public function __construct($name) {
+        $this-&gt;name = (string)$name;
+    }
+
+
+    public function getName() {
+        return 'Group: ' . $this-&gt;name;
+    }
+}
+
+
+$group = new Group('my group');
+$user = new User('my user');
+
+
+$visitor = new RolePrintVisitor;
+
+
+$group-&gt;accept($visitor);
+$user-&gt;accept($visitor);
+</code></pre><p>我们首先创建一个<code>RoleVisitorInterface</code>，然后是<code>RolePrintVisitor</code>，它实现了<code>RoleVisitorInterface</code>本身。然后我们定义了一个抽象类<code>Role</code>，它有一个接受方法来接受<code>RoleVisitorInterface</code>的参数类型。我们进一步定义了具体的<code>User</code>和<code>Group</code>类，这两个类都是从<code>Role</code>扩展而来的。客户端实例化<code>User</code>、<code>Group</code>和<code>RolePrintVisitor</code>；将 <code>visitor</code> 传入<code>User</code>和<code>Group</code>实例的<code>accept</code>方法调用。</p><hr><p>更多文章内容请参见</p><p><a href=https://github.com/AnyStudy/PHP-7-Real-World-Application-Development>https://github.com/AnyStudy/PHP-7-Real-World-Application-Development</a></p><p>如果对您有所帮助希望您能点以下 star</p></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://www.ganymedenil.com/2021/01/09/php7-gof-behavioral-patterns.html title="使用 PHP 7 实现 GoF 设计模式之行为型" target=_blank rel=external>https://www.ganymedenil.com/2021/01/09/php7-gof-behavioral-patterns.html</a></li><li class=post-copyright-license><strong>版权声明：</strong><a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>本博客所有文章除特别声明外，均采用 CC BY 4.0 CN协议 许可协议。转载请注明出处</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/GanymedeNil target=_blank class="img-burn thumb-sm visible-lg"><img src=/avatar.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/GanymedeNil target=_blank><span class=text-dark>Ganymede Nil</span><small class=ml-1x>Developer</small></a></h3><div>喜欢新事物，关注后端动态，对新的技术有追求； 喜欢 coding。</div></div></figure></div></div></div></article><section id=comments><div id=lv-container data-id=city data-uid=MTAyMC8zMjkzNC85NDk1><noscript>为正常使用来必力评论功能请激活JavaScript</noscript></div></section></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=/2021/01/09/php7-gof-structural-patterns.html title="使用 PHP 7 实现 GoF 设计模式之结构型"><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=next><a href=/2021/04/28/php71-to-php74.html title="PHP 7.1 升级至 7.4"><span>上一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden=true></i></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i><i class="text-in icon icon-close"></i><span>]</span></a></li></ul><button type=button class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle=modal data-target=#donateModal><span>赏</span></button><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav><div class="modal modal-center modal-small modal-xs-full fade" id=donateModal tabindex=-1 role=dialog><div class=modal-dialog role=document><div class="modal-content donate"><button type=button class=close data-dismiss=modal aria-label=Close><span aria-hidden=true>&#215;</span></button><div class=modal-body><div class=donate-box><div class=donate-head><p>感谢您的支持,我会继续努力的!</p></div><div class=tab-content><div role=tabpanel class="tab-pane fade active in" id=alipay><div class=donate-payimg><img src=/donate/alipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开支付宝扫一扫，即可进行扫码打赏哦~</p></div><div role=tabpanel class="tab-pane fade" id=wechatpay><div class=donate-payimg><img src=/donate/weipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开微信扫一扫，即可进行扫码打赏哦</p></div></div><div class=donate-footer><ul class="nav nav-tabs nav-justified" role=tablist><li role=presentation class=active><a href=#alipay id=alipay-tab role=tab data-toggle=tab aria-controls=alipay aria-expanded=true><i class="icon icon-alipay"></i>支付宝</a></li><li role=presentation><a href=#wechatpay role=tab id=wechatpay-tab data-toggle=tab aria-controls=wechatpay aria-expanded=false><i class="icon icon-wepay"></i>微信支付</a></li></ul></div></div></div></div></div></div></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/GanymedeNil target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li><li><a href=http://weibo.com/jinhongyang target=_blank title=weibo data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li></ul><div class=copyright>&copy;2017 -
+2021<div class=publishby>Theme by <a href=https://github.com/cofess target=_blank>cofess </a>base on<a href=https://github.com/cofess/hexo-theme-pure target=_blank> pure</a>.</div><div>powered by <a href=https://gohugo.io/ target=_blank>hugo</a></div><div class=beian><a href=http://beian.miit.gov.cn/ target=_blank>京ICP备17030231号-2</a></div><div class=youpaiyun>本站CDN提供商<br><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target=_blank><img src=/upyun.png width=100px alt=又拍云></a></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/php.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/bash.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/cmake.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/dockerfile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/json.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/lua.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/makefile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/nginx.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/rust.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/shell.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/yaml.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''})
+hljs.initHighlightingOnLoad();</script><script src=/js/application.min.c8daa9b5d327b43970f2eff03796397969d0415d8caaf0c457d6ad06021b9fbe.js></script><script src=/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)',},ROOT_URL:'https:\/\/www.ganymedenil.com',CONTENT_URL:'https:\/\/www.ganymedenil.com\/searchindex.json ',};window.INSIGHT_CONFIG=INSIGHT_CONFIG;})(window);</script><script type=text/javascript src=/js/insight.min.a45f0c540bbabb3eba8a1a375b33b519097b4bb15952d0b3e121fd4c43c188755817178818c0dc108176b0561899305d357b615873c07f930a561b0cc50b2f92.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:true,});</script><script defer type=text/javascript>(function(d,s){var j,e=d.getElementsByTagName(s)[0];if(typeof LivereTower==='function'){return;}
+j=d.createElement(s);j.src='https://cdn-city.livere.com/js/embed.dist.js';j.async=true;e.parentNode.insertBefore(j,e);})(document,'script');</script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-140810980-1"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','UA-140810980-1');</script></body></html>

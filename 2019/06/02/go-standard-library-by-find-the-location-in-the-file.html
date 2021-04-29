@@ -1,0 +1,133 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>go基础库之在文件中寻找位置 - ZA TAN</title><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。"><meta name=generator content="Hugo 0.68.3 with theme pure"><title>go基础库之在文件中寻找位置 - ZA TAN</title><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/css/style.min.7dc20efbc53647d41aa9ddea0c48e59300223d084e66ea0cbe7c30bd88903acc.css><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="go基础库之在文件中寻找位置"><meta property="og:description" content="在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。"><meta property="og:type" content="article"><meta property="og:url" content="https://www.ganymedenil.com/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html"><meta property="article:published_time" content="2019-06-02T17:45:53+00:00"><meta property="article:modified_time" content="2019-06-02T17:45:53+00:00"><meta itemprop=name content="go基础库之在文件中寻找位置"><meta itemprop=description content="在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。"><meta itemprop=datePublished content="2019-06-02T17:45:53+00:00"><meta itemprop=dateModified content="2019-06-02T17:45:53+00:00"><meta itemprop=wordCount content="1010"><meta itemprop=keywords content="go,"><meta name=twitter:card content="summary"><meta name=twitter:title content="go基础库之在文件中寻找位置"><meta name=twitter:description content="在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head></head><body class="main-center theme-white" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/GanymedeNil target=_blank><img class="img-circle img-rotate" src=/avatar.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">Ganymede Nil</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">Developer</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>BeiJing, China</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i><span class=menu-title>首页</span></a></li><li class="menu-item menu-item-archives"><a href=/posts><i class="icon icon-archives-fill"></i><span class=menu-title>归档</span></a></li><li class="menu-item menu-item-categories"><a href=/categories><i class="icon icon-folder"></i><span class=menu-title>分类</span></a></li><li class="menu-item menu-item-tags"><a href=/tags><i class="icon icon-tags"></i><span class=menu-title>标签</span></a></li><li class="menu-item menu-item-links"><a href=/links><i class="icon icon-friendship"></i><span class=menu-title>友链</span></a></li><li class="menu-item menu-item-about"><a href=/about><i class="icon icon-cup-fill"></i><span class=menu-title>关于</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>公告</h3><div class=widget-body><div id=board><div class=content><p>欢迎交流与分享经验!~</p></div></div></div></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list><li class=category-list-item><a href=/categories/Laravel/ class=category-list-link>Laravel</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/PHP/ class=category-list-link>PHP</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/go%E5%9F%BA%E7%A1%80%E5%BA%93/ class=category-list-link>go基础库</a><span class=category-list-count>51</span></li><li class=category-list-item><a href=/categories/php7/ class=category-list-link>php7</a><span class=category-list-count>5</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84NGINX/ class=category-list-link>写给大忙人看的NGINX</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B3%BB%E7%B1%BB/ class=category-list-link>写给大忙人看的技术书系类</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%BC%80%E5%8F%91/ class=category-list-link>开发</a><span class=category-list-count>11</span></li><li class=category-list-item><a href=/categories/%E6%9E%B6%E6%9E%84/ class=category-list-link>架构</a><span class=category-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=/tags/Php-Storm/ class=tag-list-link>Php-Storm</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/Predis/ class=tag-list-link>Predis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/ddd/ class=tag-list-link>ddd</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/docker/ class=tag-list-link>docker</a><span class=tag-list-count>3</span></li><li class=tag-list-item><a href=/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>54</span></li><li class=tag-list-item><a href=/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/laravel/ class=tag-list-link>laravel</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/nginx/ class=tag-list-link>nginx</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/php/ class=tag-list-link>php</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=/tags/redis/ class=tag-list-link>redis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/rust/ class=tag-list-link>rust</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/swoole/ class=tag-list-link>swoole</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/xdebug/ class=tag-list-link>xdebug</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=/2021/04/28/php71-to-php74.html class=title>PHP 7.1 升级至 7.4</a></p><p class=item-date><time datetime="2021-04-28 22:18:34 +0000 UTC" itemprop=datePublished>2021-04-28</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-behavioral-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之行为型</a></p><p class=item-date><time datetime="2021-01-09 23:20:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-structural-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之结构型</a></p><p class=item-date><time datetime="2021-01-09 23:10:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-creational-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之创建型</a></p><p class=item-date><time datetime="2021-01-09 23:04:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2020/10/04/php-7-real-world-application-development.html class=title>PHP 7:真实世界的应用开发（中文翻译）</a></p><p class=item-date><time datetime="2020-10-04 15:53:09 +0000 UTC" itemprop=datePublished>2020-10-04</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html>go基础库之在文件中寻找位置</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html class=article-date><time datetime="2019-06-02 17:45:53 +0000 UTC" itemprop=datePublished>2019-06-02</time></a></span>
+<span class=article-category><i class="icon icon-folder"></i>&nbsp;
+<a class=article-category-link href=/categories/go%E5%9F%BA%E7%A1%80%E5%BA%93/>go基础库</a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/go/>go</a></span>
+<span class=post-comment><i class="icon icon-comment"></i>&nbsp;<a href=/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html#comments class=article-comment-link>评论</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 1010字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 3分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><p>在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。</p><h1 id=在文件中寻找位置>在文件中寻找位置</h1><h2 id=golang-版本>Golang 版本</h2><p>1.12.1</p><h2 id=前言>前言</h2><p>在某些情况下，需要从文件中的特定位置读取或写入，例如索引文件。本文将向你展示如何在平面文件操作上下文中使用位置搜索。</p><h2 id=实现>实现</h2><p>创建文件<code>flatfile.txt</code>，内容如下：</p><pre><code class=language-txt>123.Jun.......Wong......
+12..Novak.....Jurgen....
+10..Thomas....Sohlich...
+</code></pre><p>创建文件<code>fileseek.go</code>，代码如下：</p><pre><code class=language-go>package main
+
+import (
+	&quot;errors&quot;
+	&quot;fmt&quot;
+	&quot;os&quot;
+)
+
+const lineLegth = 25
+
+func main() {
+
+	f, e := os.OpenFile(&quot;flatfile.txt&quot;, os.O_RDWR|os.O_CREATE,
+		os.ModePerm)
+	if e != nil {
+		panic(e)
+	}
+	defer f.Close()
+
+	fmt.Println(readRecords(2, &quot;last&quot;, f))
+	if err := writeRecord(2, &quot;first&quot;, &quot;Radomir&quot;, f); err != nil {
+		panic(err)
+	}
+	fmt.Println(readRecords(2, &quot;first&quot;, f))
+	if err := writeRecord(10, &quot;first&quot;, &quot;Andrew&quot;, f); err != nil {
+		panic(err)
+	}
+	fmt.Println(readRecords(10, &quot;first&quot;, f))
+	fmt.Println(readLine(2, f))
+}
+
+func readLine(line int, f *os.File) (string, error) {
+	lineBuffer := make([]byte, 24)
+	f.Seek(int64(line*lineLegth), 0)
+	_, err := f.Read(lineBuffer)
+	return string(lineBuffer), err
+}
+
+func writeRecord(line int, column, dataStr string, f *os.File)error {
+definedLen := 10
+position := int64(line * lineLegth)
+switch column {
+case &quot;id&quot;:
+definedLen = 4
+case &quot;first&quot;:
+position += 4
+case &quot;last&quot;:
+position += 14
+default:
+return errors.New(&quot;Column not defined&quot;)
+}
+
+if len([]byte(dataStr)) &gt; definedLen {
+return fmt.Errorf(&quot;Maximum length for '%s' is %d&quot;,
+column, definedLen)
+}
+
+data := make([]byte, definedLen)
+for i := range data {
+data[i] = '.'
+}
+copy(data, []byte(dataStr))
+_, err := f.WriteAt(data, position)
+return err
+}
+
+func readRecords(line int, column string, f *os.File)(string, error) {
+lineBuffer := make([]byte, 24)
+f.ReadAt(lineBuffer, int64(line*lineLegth))
+var retVal string
+switch column {
+case &quot;id&quot;:
+return string(lineBuffer[:3]), nil
+case &quot;first&quot;:
+return string(lineBuffer[4:13]), nil
+case &quot;last&quot;:
+return string(lineBuffer[14:23]), nil
+}
+
+return retVal, errors.New(&quot;Column not defined&quot;)
+}
+</code></pre><pre><code class=language-bash>$ go run fileseek.go
+Sohlich.. &lt;nil&gt;
+Radomir.. &lt;nil&gt;
+Andrew... &lt;nil&gt;
+10..Radomir...Sohlich... &lt;nil&gt;
+</code></pre><p>我们可以使用十六进制看一下<code>flatfile.txt</code>，使用<code>xxd flatfile.txt</code>。</p><pre><code class=language-bash>$ xxd flatfile.txt                                       
+00000000: 3132 332e 4a75 6e2e 2e2e 2e2e 2e2e 576f  123.Jun.......Wo
+00000010: 6e67 2e2e 2e2e 2e2e 0a31 322e 2e4e 6f76  ng.......12..Nov
+00000020: 616b 2e2e 2e2e 2e4a 7572 6765 6e2e 2e2e  ak.....Jurgen...
+00000030: 2e0a 3130 2e2e 5261 646f 6d69 722e 2e2e  ..10..Radomir...
+00000040: 536f 686c 6963 682e 2e2e 0000 0000 0000  Sohlich.........
+00000050: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000060: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000070: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000080: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000090: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000f0: 0000 0000 0000 0000 0000 0000 0000 416e  ..............An
+00000100: 6472 6577 2e2e 2e2e                      drew....
+</code></pre><h2 id=原理>原理</h2><p>前面的示例使用平面文件展示了如何在文件中进行位置查找、读取和写入。通常，要移动<code>File</code>当前指针的位置，可以使用<code>Seek</code>方法。它有两个参数，分别是位置和如何计算位置，0 -相对于文件原点，1 -相对于当前位置，2 -相对于文件结束。这样就可以在文件中移动光标。在前面代码中的<code>readLine</code>函数的实现中使用了<code>Seek</code>方法。</p><blockquote><p><em>平面文件是存储数据的最基本形式。其记录格式一般具有固定的长度，并且每一条记录的格式也是相同的。示例中的平面文件的结构是：ID-4个字符，FirstName-10个字符，LastName-10个字符。 整个记录长24个字符，以第25个字符的换行符结束。</em></p></blockquote><p><code>os.File</code>还包含<code>ReadAt</code>和<code>WriteAt</code>方法。这些方法将字节数据写入/读取从何处开始的偏移量。这样可以将写和读简化到文件中的某个位置。</p><blockquote><p><em>注意，本例假设每个rune只有一个字节，对于特殊字符，不必为true，以此类推。</em></p></blockquote></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://www.ganymedenil.com/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html title=go基础库之在文件中寻找位置 target=_blank rel=external>https://www.ganymedenil.com/2019/06/02/go-standard-library-by-find-the-location-in-the-file.html</a></li><li class=post-copyright-license><strong>版权声明：</strong><a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>本博客所有文章除特别声明外，均采用 CC BY 4.0 CN协议 许可协议。转载请注明出处</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/GanymedeNil target=_blank class="img-burn thumb-sm visible-lg"><img src=/avatar.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/GanymedeNil target=_blank><span class=text-dark>Ganymede Nil</span><small class=ml-1x>Developer</small></a></h3><div>喜欢新事物，关注后端动态，对新的技术有追求； 喜欢 coding。</div></div></figure></div></div></div></article><section id=comments><div id=lv-container data-id=city data-uid=MTAyMC8zMjkzNC85NDk1><noscript>为正常使用来必力评论功能请激活JavaScript</noscript></div></section></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=/2019/05/31/go-standard-library-by-read-write-different-character-sets.html title=go基础库之读/写不同的字符集><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=next><a href=/2019/06/02/go-standard-library-by-read-and-write-binary-data.html title=go基础库之读写二进制数据><span>上一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden=true></i></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i><i class="text-in icon icon-close"></i><span>]</span></a></li></ul><button type=button class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle=modal data-target=#donateModal><span>赏</span></button><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav><div class="modal modal-center modal-small modal-xs-full fade" id=donateModal tabindex=-1 role=dialog><div class=modal-dialog role=document><div class="modal-content donate"><button type=button class=close data-dismiss=modal aria-label=Close><span aria-hidden=true>&#215;</span></button><div class=modal-body><div class=donate-box><div class=donate-head><p>感谢您的支持,我会继续努力的!</p></div><div class=tab-content><div role=tabpanel class="tab-pane fade active in" id=alipay><div class=donate-payimg><img src=/donate/alipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开支付宝扫一扫，即可进行扫码打赏哦~</p></div><div role=tabpanel class="tab-pane fade" id=wechatpay><div class=donate-payimg><img src=/donate/weipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开微信扫一扫，即可进行扫码打赏哦</p></div></div><div class=donate-footer><ul class="nav nav-tabs nav-justified" role=tablist><li role=presentation class=active><a href=#alipay id=alipay-tab role=tab data-toggle=tab aria-controls=alipay aria-expanded=true><i class="icon icon-alipay"></i>支付宝</a></li><li role=presentation><a href=#wechatpay role=tab id=wechatpay-tab data-toggle=tab aria-controls=wechatpay aria-expanded=false><i class="icon icon-wepay"></i>微信支付</a></li></ul></div></div></div></div></div></div></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/GanymedeNil target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li><li><a href=http://weibo.com/jinhongyang target=_blank title=weibo data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li></ul><div class=copyright>&copy;2017 -
+2021<div class=publishby>Theme by <a href=https://github.com/cofess target=_blank>cofess </a>base on<a href=https://github.com/cofess/hexo-theme-pure target=_blank> pure</a>.</div><div>powered by <a href=https://gohugo.io/ target=_blank>hugo</a></div><div class=beian><a href=http://beian.miit.gov.cn/ target=_blank>京ICP备17030231号-2</a></div><div class=youpaiyun>本站CDN提供商<br><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target=_blank><img src=/upyun.png width=100px alt=又拍云></a></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/php.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/bash.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/cmake.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/dockerfile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/json.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/lua.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/makefile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/nginx.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/rust.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/shell.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/yaml.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''})
+hljs.initHighlightingOnLoad();</script><script src=/js/application.min.c8daa9b5d327b43970f2eff03796397969d0415d8caaf0c457d6ad06021b9fbe.js></script><script src=/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)',},ROOT_URL:'https:\/\/www.ganymedenil.com',CONTENT_URL:'https:\/\/www.ganymedenil.com\/searchindex.json ',};window.INSIGHT_CONFIG=INSIGHT_CONFIG;})(window);</script><script type=text/javascript src=/js/insight.min.a45f0c540bbabb3eba8a1a375b33b519097b4bb15952d0b3e121fd4c43c188755817178818c0dc108176b0561899305d357b615873c07f930a561b0cc50b2f92.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:true,});</script><script defer type=text/javascript>(function(d,s){var j,e=d.getElementsByTagName(s)[0];if(typeof LivereTower==='function'){return;}
+j=d.createElement(s);j.src='https://cdn-city.livere.com/js/embed.dist.js';j.async=true;e.parentNode.insertBefore(j,e);})(document,'script');</script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-140810980-1"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','UA-140810980-1');</script></body></html>

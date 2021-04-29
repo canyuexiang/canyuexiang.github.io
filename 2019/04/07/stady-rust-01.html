@@ -1,0 +1,168 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>rust语言学习（一） - ZA TAN</title><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="rust的基础部分，变量、常量、数据类型、函数、注释和控制流"><meta name=generator content="Hugo 0.68.3 with theme pure"><title>rust语言学习（一） - ZA TAN</title><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/css/style.min.7dc20efbc53647d41aa9ddea0c48e59300223d084e66ea0cbe7c30bd88903acc.css><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="rust语言学习（一）"><meta property="og:description" content="rust的基础部分，变量、常量、数据类型、函数、注释和控制流"><meta property="og:type" content="article"><meta property="og:url" content="https://www.ganymedenil.com/2019/04/07/stady-rust-01.html"><meta property="article:published_time" content="2019-04-07T15:27:36+00:00"><meta property="article:modified_time" content="2019-04-07T15:27:36+00:00"><meta itemprop=name content="rust语言学习（一）"><meta itemprop=description content="rust的基础部分，变量、常量、数据类型、函数、注释和控制流"><meta itemprop=datePublished content="2019-04-07T15:27:36+00:00"><meta itemprop=dateModified content="2019-04-07T15:27:36+00:00"><meta itemprop=wordCount content="1704"><meta itemprop=keywords content="rust,"><meta name=twitter:card content="summary"><meta name=twitter:title content="rust语言学习（一）"><meta name=twitter:description content="rust的基础部分，变量、常量、数据类型、函数、注释和控制流"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head></head><body class="main-center theme-white" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/GanymedeNil target=_blank><img class="img-circle img-rotate" src=/avatar.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">Ganymede Nil</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">Developer</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>BeiJing, China</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i><span class=menu-title>首页</span></a></li><li class="menu-item menu-item-archives"><a href=/posts><i class="icon icon-archives-fill"></i><span class=menu-title>归档</span></a></li><li class="menu-item menu-item-categories"><a href=/categories><i class="icon icon-folder"></i><span class=menu-title>分类</span></a></li><li class="menu-item menu-item-tags"><a href=/tags><i class="icon icon-tags"></i><span class=menu-title>标签</span></a></li><li class="menu-item menu-item-links"><a href=/links><i class="icon icon-friendship"></i><span class=menu-title>友链</span></a></li><li class="menu-item menu-item-about"><a href=/about><i class="icon icon-cup-fill"></i><span class=menu-title>关于</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>公告</h3><div class=widget-body><div id=board><div class=content><p>欢迎交流与分享经验!~</p></div></div></div></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list><li class=category-list-item><a href=/categories/Laravel/ class=category-list-link>Laravel</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/PHP/ class=category-list-link>PHP</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/go%E5%9F%BA%E7%A1%80%E5%BA%93/ class=category-list-link>go基础库</a><span class=category-list-count>51</span></li><li class=category-list-item><a href=/categories/php7/ class=category-list-link>php7</a><span class=category-list-count>5</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84NGINX/ class=category-list-link>写给大忙人看的NGINX</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%86%99%E7%BB%99%E5%A4%A7%E5%BF%99%E4%BA%BA%E7%9C%8B%E7%9A%84%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B3%BB%E7%B1%BB/ class=category-list-link>写给大忙人看的技术书系类</a><span class=category-list-count>1</span></li><li class=category-list-item><a href=/categories/%E5%BC%80%E5%8F%91/ class=category-list-link>开发</a><span class=category-list-count>11</span></li><li class=category-list-item><a href=/categories/%E6%9E%B6%E6%9E%84/ class=category-list-link>架构</a><span class=category-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=/tags/Php-Storm/ class=tag-list-link>Php-Storm</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/Predis/ class=tag-list-link>Predis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/ddd/ class=tag-list-link>ddd</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/docker/ class=tag-list-link>docker</a><span class=tag-list-count>3</span></li><li class=tag-list-item><a href=/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>54</span></li><li class=tag-list-item><a href=/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/laravel/ class=tag-list-link>laravel</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/nginx/ class=tag-list-link>nginx</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/php/ class=tag-list-link>php</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=/tags/redis/ class=tag-list-link>redis</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/rust/ class=tag-list-link>rust</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/swoole/ class=tag-list-link>swoole</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=/tags/xdebug/ class=tag-list-link>xdebug</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=/2021/04/28/php71-to-php74.html class=title>PHP 7.1 升级至 7.4</a></p><p class=item-date><time datetime="2021-04-28 22:18:34 +0000 UTC" itemprop=datePublished>2021-04-28</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-behavioral-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之行为型</a></p><p class=item-date><time datetime="2021-01-09 23:20:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-structural-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之结构型</a></p><p class=item-date><time datetime="2021-01-09 23:10:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2021/01/09/php7-gof-creational-patterns.html class=title>使用 PHP 7 实现 GoF 设计模式之创建型</a></p><p class=item-date><time datetime="2021-01-09 23:04:53 +0000 UTC" itemprop=datePublished>2021-01-09</time></p></div></li><li><div class=item-inner><p class=item-title><a href=/2020/10/04/php-7-real-world-application-development.html class=title>PHP 7:真实世界的应用开发（中文翻译）</a></p><p class=item-date><time datetime="2020-10-04 15:53:09 +0000 UTC" itemprop=datePublished>2020-10-04</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2019/04/07/stady-rust-01.html>rust语言学习（一）</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=/2019/04/07/stady-rust-01.html class=article-date><time datetime="2019-04-07 15:27:36 +0000 UTC" itemprop=datePublished>2019-04-07</time></a></span>
+<span class=article-category><i class="icon icon-folder"></i>&nbsp;
+<a class=article-category-link href=/categories/%E5%BC%80%E5%8F%91/>开发</a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/rust/>rust</a></span>
+<span class=post-comment><i class="icon icon-comment"></i>&nbsp;<a href=/2019/04/07/stady-rust-01.html#comments class=article-comment-link>评论</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 1704字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 4分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><p>rust的基础部分，变量、常量、数据类型、函数、注释和控制流</p><h1 id=变量与可变性>变量与可变性</h1><ul><li><p>变量使用<code>let</code>关键字，默认不可变</p></li><li><p>但在变量名之前加<code>mut</code>关键字来使其可变</p></li><li><p>常量使用<code>const</code>关键字，并且<strong>必须注明值类型</strong></p><pre><code class=language-rust>const MAX_POINTS: u32 = 100_000;
+  
+</code></pre></li><li><p>变量隐藏，重复使用<code>let</code>关键字来多次隐藏。当再次使用<code>let</code>时，实际上<strong>创建了一个新变量</strong>，我们<strong>可以改变值的类型</strong>，但复用这个名字</p><pre><code class=language-rust>fn main(){
+    let x =5;
+    let x = x + 1;
+    let x = x * 2;
+    println!(&quot;x值是:{}&quot;,x);
+    // x值是:12
+}
+  
+</code></pre></li><li><p>使用<code>mut</code>创建的变量，二次赋值必须是同类型</p></li></ul><h1 id=数据类型>数据类型</h1><h2 id=标量类型>标量类型</h2><h3 id=整数>整数</h3><table><thead><tr><th align=center>长度</th><th align=center>有符号</th><th align=center>无符号</th></tr></thead><tbody><tr><td align=center>8-bit</td><td align=center>i8</td><td align=center>u8</td></tr><tr><td align=center>16-bit</td><td align=center>i16</td><td align=center>u16</td></tr><tr><td align=center>32-bit</td><td align=center>i32</td><td align=center>u32</td></tr><tr><td align=center>64-bit</td><td align=center>i64</td><td align=center>u64</td></tr><tr><td align=center>arch</td><td align=center>isize</td><td align=center>usize</td></tr></tbody></table><blockquote><p>每一个有符号的变体可以储存包含从 -(2^(n-1)) 到 2^(n-1)-1 在内的数字，这里 n 是变体使用的位数。所以 <code>i8</code> 可以储存从 -(2^(7)) 到 2^(7)-1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2^(n)-1 的数字，所以 <code>u8</code> 可以储存从 0 到 2^(8)-1 的数字，也就是从 0 到 255。
+另外，<code>isize</code> 和 <code>usize</code> 类型依赖运行程序的计算机架构：64 位架构上它们是 64 位的， 32 位架构上它们是 32 位的。</p></blockquote><p>Rust中的整型字面值</p><table><thead><tr><th align=center>数字字面值</th><th align=center>例子</th></tr></thead><tbody><tr><td align=center>Decimal</td><td align=center><code>98_222</code></td></tr><tr><td align=center>Hex</td><td align=center><code>0xff</code></td></tr><tr><td align=center>Octal</td><td align=center><code>0o77</code></td></tr><tr><td align=center>Binary</td><td align=center><code>0b1111_0000</code></td></tr><tr><td align=center>Byte(<code>u8</code> only)</td><td align=center><code>b'A'</code></td></tr></tbody></table><blockquote><p>那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 i32：它通常是最快的，甚至在 64 位系统上也是。isize 或 usize 主要作为某些集合的索引。</p></blockquote><p><strong>整型溢出</strong></p><p>当在 debug 模式编译时，Rust 检查这类问题并使程序 panic，这个术语被 Rust 用来表明程序因错误而退出。
+在 release 构建中，Rust 不检测溢出，相反会进行一种被称为 “two’s complement wrapping” 的操作。简而言之，256 变成 0，257 变成 1，依此类推。依赖溢出被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，<code>Wrapping</code>。</p><h3 id=浮点型>浮点型</h3><p>Rust 的浮点数类型是 <code>f32</code> 和 <code>f64</code>，分别占 32 位和 64 位。默认类型是 <code>f64</code>，因为在现代 CPU 中，它与 <code>f32</code> 速度几乎一样，不过精度更高。</p><h3 id=布尔型>布尔型</h3><p>Rust 中的布尔类型有两个可能的值：<code>true</code> 和 <code>false</code>。Rust 中的布尔类型使用 <code>bool</code> 表示。</p><h3 id=字符类型>字符类型</h3><p>Rust 的 <code>char</code> 类型是语言中最原生的字母类型（注意 <code>char</code> 由单引号指定，不同于字符串使用双引号。）</p><h2 id=符合类型>符合类型</h2><h3 id=元组类型>元组类型</h3><pre><code class=language-rust>fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+</code></pre><pre><code class=language-rust>fn main() {
+    let tup = (500, 6.4, 1);
+
+    let (x, y, z) = tup;
+
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre><pre><code class=language-rust>fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+
+    let six_point_four = x.1;
+
+    let one = x.2;
+}
+</code></pre><h3 id=数组类型>数组类型</h3><p>与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组是固定长度的：一旦声明，它们的长度不能增长或缩小。</p><pre><code class=language-rust>fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+</code></pre><pre><code class=language-rust>let a: [i32; 5] = [1, 2, 3, 4, 5];
+</code></pre><pre><code class=language-rust>fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    let second = a[1];
+}
+</code></pre><p>当访问数组越界，编译并不会产生任何错误，不过程序会出现一个运行时（runtime）错误并且不会成功退出。</p><h1 id=函数>函数</h1><pre><code class=language-rust>fn main() {
+    another_function(5, 6);
+}
+
+fn another_function(x: i32, y: i32) {
+    println!(&quot;The value of x is: {}&quot;, x);
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre><blockquote><p><strong>语句</strong>（Statements）是执行一些操作但<strong>不返回值</strong>的指令。<strong>表达式</strong>（Expressions）计算并产生一个值。</p></blockquote><pre><code class=language-rust>fn main() {
+    let x = 5;
+
+    let y = {
+        let x = 3;
+        x + 1
+    };
+
+    println!(&quot;The value of y is: {}&quot;, y);
+    // The value of y is: 4
+}
+</code></pre><h2 id=具有返回值的函数>具有返回值的函数</h2><p>函数可以向调用它的代码返回值。我们并不对返回值命名，但要在箭头（->）后<strong>声明它的类型</strong>。在 Rust 中，函数的返回值等同于函数体最后一个表达式的值。使用 return 关键字和指定值，可从函数中提前返回；但大部分函数隐式的返回最后的表达式。</p><pre><code class=language-rust>fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre><h1 id=注释>注释</h1><p>只允许 <code>//</code> 这种写法。</p><h1 id=控制流>控制流</h1><h2 id=if-表达式><code>if</code> 表达式</h2><pre><code class=language-rust>fn main() {
+    let number = 3;
+
+    if number &lt; 5 {
+        println!(&quot;condition was true&quot;);
+    } else {
+        println!(&quot;condition was false&quot;);
+    }
+}
+</code></pre><pre><code class=language-rust>fn main() {
+    // 我们要判断 number 不为零
+    let number = 3;
+    // if 表达式只允许条件返回 bool 类型
+    // 这里改为 number != 0 才能编译通过
+    if number {
+        println!(&quot;number was three&quot;);
+    }
+}
+</code></pre><pre><code class=language-rust>fn main() {
+    let number = 6;
+
+    if number % 4 == 0 {
+        println!(&quot;number is divisible by 4&quot;);
+    } else if number % 3 == 0 {
+        println!(&quot;number is divisible by 3&quot;);
+    } else if number % 2 == 0 {
+        println!(&quot;number is divisible by 2&quot;);
+    } else {
+        println!(&quot;number is not divisible by 4, 3, or 2&quot;);
+    }
+}
+</code></pre><h3 id=在-let-语句中使用-if>在 <code>let</code> 语句中使用 <code>if</code></h3><pre><code class=language-rust>fn main() {
+    let condition = true;
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+    // The value of number is: 5
+}
+</code></pre><p>在这种使用场景中，<code>if</code> 和 <code>else</code> <strong>分支的值类型必须一致</strong>，不然编译会提示错误。</p><p>##使用循环重复执行</p><h3 id=loop>loop</h3><pre><code class=language-rust>fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    assert_eq!(result, 20);
+}
+</code></pre><h3 id=while>while</h3><p>当条件为真，执行循环。当条件不再为真，调用 <code>break</code> 停止循环。</p><pre><code class=language-rust>fn main() {
+    let mut number = 3;
+
+    while number != 0 {
+        println!(&quot;{}!&quot;, number);
+
+        number = number - 1;
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre><h3 id=for>for</h3><pre><code class=language-rust>fn main() {
+    let a = [10, 20, 30, 40, 50];
+
+    for element in a.iter() {
+        println!(&quot;the value is: {}&quot;, element);
+    }
+}
+</code></pre></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://www.ganymedenil.com/2019/04/07/stady-rust-01.html title=rust语言学习（一） target=_blank rel=external>https://www.ganymedenil.com/2019/04/07/stady-rust-01.html</a></li><li class=post-copyright-license><strong>版权声明：</strong><a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>本博客所有文章除特别声明外，均采用 CC BY 4.0 CN协议 许可协议。转载请注明出处</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/GanymedeNil target=_blank class="img-burn thumb-sm visible-lg"><img src=/avatar.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/GanymedeNil target=_blank><span class=text-dark>Ganymede Nil</span><small class=ml-1x>Developer</small></a></h3><div>喜欢新事物，关注后端动态，对新的技术有追求； 喜欢 coding。</div></div></figure></div></div></div></article><section id=comments><div id=lv-container data-id=city data-uid=MTAyMC8zMjkzNC85NDk1><noscript>为正常使用来必力评论功能请激活JavaScript</noscript></div></section></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=/2019/01/13/Build-hexo-git.html title="使用git hook 部署 hexo 静态博客"><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=next><a href=/2019/05/11/go-standard-library-by-runtime-version.html title=go基础库之go版本获取><span>上一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden=true></i></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i><i class="text-in icon icon-close"></i><span>]</span></a></li></ul><button type=button class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle=modal data-target=#donateModal><span>赏</span></button><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav><div class="modal modal-center modal-small modal-xs-full fade" id=donateModal tabindex=-1 role=dialog><div class=modal-dialog role=document><div class="modal-content donate"><button type=button class=close data-dismiss=modal aria-label=Close><span aria-hidden=true>&#215;</span></button><div class=modal-body><div class=donate-box><div class=donate-head><p>感谢您的支持,我会继续努力的!</p></div><div class=tab-content><div role=tabpanel class="tab-pane fade active in" id=alipay><div class=donate-payimg><img src=/donate/alipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开支付宝扫一扫，即可进行扫码打赏哦~</p></div><div role=tabpanel class="tab-pane fade" id=wechatpay><div class=donate-payimg><img src=/donate/weipay.jpg alt=扫码支持 title=扫一扫></div><p class="text-muted mv">扫码打赏, 多少你说了算~</p><p class=text-grey>打开微信扫一扫，即可进行扫码打赏哦</p></div></div><div class=donate-footer><ul class="nav nav-tabs nav-justified" role=tablist><li role=presentation class=active><a href=#alipay id=alipay-tab role=tab data-toggle=tab aria-controls=alipay aria-expanded=true><i class="icon icon-alipay"></i>支付宝</a></li><li role=presentation><a href=#wechatpay role=tab id=wechatpay-tab data-toggle=tab aria-controls=wechatpay aria-expanded=false><i class="icon icon-wepay"></i>微信支付</a></li></ul></div></div></div></div></div></div></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/GanymedeNil target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li><li><a href=http://weibo.com/jinhongyang target=_blank title=weibo data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li></ul><div class=copyright>&copy;2017 -
+2021<div class=publishby>Theme by <a href=https://github.com/cofess target=_blank>cofess </a>base on<a href=https://github.com/cofess/hexo-theme-pure target=_blank> pure</a>.</div><div>powered by <a href=https://gohugo.io/ target=_blank>hugo</a></div><div class=beian><a href=http://beian.miit.gov.cn/ target=_blank>京ICP备17030231号-2</a></div><div class=youpaiyun>本站CDN提供商<br><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target=_blank><img src=/upyun.png width=100px alt=又拍云></a></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/php.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/bash.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/cmake.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/dockerfile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/json.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/lua.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/makefile.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/nginx.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/rust.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/shell.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/yaml.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''})
+hljs.initHighlightingOnLoad();</script><script src=/js/application.min.c8daa9b5d327b43970f2eff03796397969d0415d8caaf0c457d6ad06021b9fbe.js></script><script src=/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)',},ROOT_URL:'https:\/\/www.ganymedenil.com',CONTENT_URL:'https:\/\/www.ganymedenil.com\/searchindex.json ',};window.INSIGHT_CONFIG=INSIGHT_CONFIG;})(window);</script><script type=text/javascript src=/js/insight.min.a45f0c540bbabb3eba8a1a375b33b519097b4bb15952d0b3e121fd4c43c188755817178818c0dc108176b0561899305d357b615873c07f930a561b0cc50b2f92.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:true,});</script><script defer type=text/javascript>(function(d,s){var j,e=d.getElementsByTagName(s)[0];if(typeof LivereTower==='function'){return;}
+j=d.createElement(s);j.src='https://cdn-city.livere.com/js/embed.dist.js';j.async=true;e.parentNode.insertBefore(j,e);})(document,'script');</script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-140810980-1"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','UA-140810980-1');</script></body></html>
